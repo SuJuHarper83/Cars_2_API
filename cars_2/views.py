@@ -10,7 +10,15 @@ from .serializers import CarSerializer
 @api_view (['GET', 'POST'])
 def cars_list(request):
     if request.method == "GET":
+
+        dealership_param = request.query_params.get('dealership')
+        print(dealership_param)
+
         cars = Car.objects.all()
+
+    if dealership_param:
+        cars = cars.filter(dealership__name=dealership_param)
+
     elif request.method == "POST":
         serializer = CarSerializer(data=request.data)
         serializer.is_valid(raise_exception = True)
